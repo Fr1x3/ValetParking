@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ParkCarFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/et_floor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="@string/hint_floor_number"
+            android:inputType="number"
+            android:textColor="@color/colorTextPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/et_lift"
+            app:layout_constraintStart_toStartOf="@+id/et_lift"
+            app:layout_constraintTop_toBottomOf="@+id/et_lift" />
+
+        <TextView
+            android:id="@+id/tv_park_car_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/park_car_title"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_car_plate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="@string/hint_car_plate"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorTextPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_park_car_title" />
+
+        <EditText
+            android:id="@+id/et_lift"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="@string/hint_lift_no"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorTextPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/et_car_plate"
+            app:layout_constraintStart_toStartOf="@+id/et_car_plate"
+            app:layout_constraintTop_toBottomOf="@+id/et_car_plate" />
+
+        <EditText
+            android:id="@+id/et_park_slot"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="@string/hint_park_slot"
+            android:inputType="number"
+            android:textColor="@color/colorTextPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/et_floor"
+            app:layout_constraintStart_toStartOf="@+id/et_floor"
+            app:layout_constraintTop_toBottomOf="@+id/et_floor" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Save"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/et_park_slot"
+            app:layout_constraintStart_toStartOf="@+id/et_park_slot"
+            app:layout_constraintTop_toBottomOf="@+id/et_park_slot" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.HomeFragment">
+
+    <Button
+        android:id="@+id/btn_park_car"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Park Car"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp" >
+        <Button
+            android:id="@+id/btn_get_car"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Get car"
+            android:textAllCaps="true"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_car_count"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/circle_status_view"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:translationX="-10dp"
+            android:translationY="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_get_car"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_get_car"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
