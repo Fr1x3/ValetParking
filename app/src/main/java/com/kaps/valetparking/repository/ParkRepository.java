@@ -2,16 +2,13 @@ package com.kaps.valetparking.repository;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.kaps.valetparking.models.Park;
 import com.kaps.valetparking.network.ServiceBuilder;
 import com.kaps.valetparking.network.ValetParkService;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -123,31 +120,33 @@ public class ParkRepository {
 
         @Override
         protected Boolean doInBackground(String... strings) {
-            final Boolean[] status = {false};
-            mValetParkService.exitPark(strings[0]).enqueue(new Callback<ResponseBody>() {
+
+            mValetParkService.exitPark(strings[0]).enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
                     if(response.code() == 200 && response.body() != null) {
                         Log.d("Repo", "exit the building ");
-                        //try {
-                            //if(response.body().string().equals("1"))
-                            //status[0] = true;
-                                String memo = response.message();
-                                mExitStatus.setValue(true);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
+                        Integer code = response.body();
+                        Log.d("Exit park", response.message());
+                        if( code == 0 )
+                            mExitStatus.setValue(true);
+                        else
+                            mExitStatus.setValue(false);
+
 
                     }
 
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    Log.d("Exit park", t.getMessage());
+                    t.printStackTrace();
                     mExitStatus.setValue(false);
                 }
             });
-            return status[0];
+
+            return null;
         }
 
 //        @Override

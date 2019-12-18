@@ -15,4 +15,5 @@
     <string name="hint_floor_number">Enter floor number</string>
     <string name="hint_lift_no">Enter lift identity</string>
     <string name="hint_park_slot">Enter parking slot number</string>
+    <string name="log_out">Log out</string>
 </resources>

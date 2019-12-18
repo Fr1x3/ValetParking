@@ -1,6 +1,8 @@
 package com.kaps.valetparking.ui;
 
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,7 +13,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,13 +28,17 @@ import android.widget.Toast;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.android.material.snackbar.Snackbar;
 import com.kaps.valetparking.R;
 import com.kaps.valetparking.models.Park;
 import com.kaps.valetparking.viewmodels.HomeViewModel;
 
 import com.kaps.valetparking.utils.Constants;
+import com.kaps.valetparking.viewmodels.LoginViewModel;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -39,8 +50,7 @@ public class HomeFragment extends Fragment {
 
     private Socket socket;
     private TextView mTvCountCar;
-
-
+    private LoginViewModel mLoginViewModel;
 
 
     public HomeFragment() {
@@ -51,6 +61,8 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // menu option
+        setHasOptionsMenu(true);
 
 
     }
@@ -127,9 +139,19 @@ public class HomeFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (args[0] != null) {
-                            int data = (int) args[0];
 
+                        if (args[0] != null) {
+                            JSONObject datas = (JSONObject) args[0];
+                            String counter, lift;
+                            int data = (int) args[0];
+                            try {
+                                counter = datas.getString(Constants.COUNTER);
+                                counter = datas.getString(Constants.ZONE);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+// todo: filter count by zone
                             addMessage(String.valueOf(data));
 
 
@@ -142,11 +164,35 @@ public class HomeFragment extends Fragment {
     };
 
     private void addMessage(String message) {
-        if( mTvCountCar != null)
+        if( mTvCountCar != null) {
             mTvCountCar.setText(message);
+
+            // vibrate to alert
+            Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            else
+                vibrator.vibrate(500);
+        }
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.logoff, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch ( item.getItemId()){
+            case R.id.action_log_off:
+                //mLoginViewModel.logOff()
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onResume() {
@@ -158,7 +204,7 @@ public class HomeFragment extends Fragment {
         }
         // SOCKETS
         socket.connect();
-        socket.on("count-pending", incomingMessages );
+        socket.on(Constants.LISTEN_TO, incomingMessages );
     }
 
 
@@ -166,7 +212,7 @@ public class HomeFragment extends Fragment {
     public void onPause() {
         super.onPause();
         socket.disconnect();
-        socket.on("count-pending", incomingMessages );
+        socket.on(Constants.LISTEN_TO, incomingMessages );
     }
 
     @Override
