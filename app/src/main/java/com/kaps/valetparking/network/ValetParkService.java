@@ -29,7 +29,7 @@ public interface ValetParkService {
     // car exit the parking lot
     @FormUrlEncoded
     @PUT("exit")
-    Call<ResponseBody> exitPark(@Field("plate_number") String plate_number);
+    Call<Integer> exitPark(@Field("plate_number") String plate_number);
 
 
 
