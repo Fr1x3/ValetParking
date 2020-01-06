@@ -29,8 +29,10 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonParser;
 import com.kaps.valetparking.R;
 import com.kaps.valetparking.models.Park;
+import com.kaps.valetparking.utils.SharedPreferenceUtil;
 import com.kaps.valetparking.viewmodels.HomeViewModel;
 
 import com.kaps.valetparking.utils.Constants;
@@ -41,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -81,7 +84,7 @@ public class HomeFragment extends Fragment {
 
 
         // count text view
-        mTvCountCar = (TextView) view.findViewById(R.id.tv_car_count);
+        mTvCountCar =  view.findViewById(R.id.tv_car_count);
 
         // viewmodel
         final HomeViewModel viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -90,8 +93,8 @@ public class HomeFragment extends Fragment {
         final NavController navController = Navigation.findNavController(view);
 
         // button
-        Button btnParkCar = (Button) view.findViewById(R.id.btn_park_car);
-        Button btngetCar = (Button) view.findViewById(R.id.btn_get_car);
+        Button btnParkCar =  view.findViewById(R.id.btn_park_car);
+        Button btngetCar = view.findViewById(R.id.btn_get_car);
 
         // navigate to process park car
         btnParkCar.setOnClickListener(new View.OnClickListener() {
@@ -141,18 +144,26 @@ public class HomeFragment extends Fragment {
                     public void run() {
 
                         if (args[0] != null) {
-                            JSONObject datas = (JSONObject) args[0];
-                            String counter, lift;
-                            int data = (int) args[0];
+
+                            ;
                             try {
-                                counter = datas.getString(Constants.COUNTER);
-                                counter = datas.getString(Constants.ZONE);
+                                JSONObject datas = new JSONObject(args[0].toString());
+
+                                Iterator<String> keys = datas.keys();
+
+                                //loop through the key set of the json object
+                                while(keys.hasNext()){
+                                    String key = keys.next();
+                                    int keyValue = datas.getInt(key);
+
+                                    // filter by zone to check if its for the intended device
+                                    if( key.compareToIgnoreCase("A") == 0 ) { //todo: compare with shared preference zone
+                                        addMessage(String.valueOf(keyValue));
+                                    }
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                return;
                             }
-// todo: filter count by zone
-                            addMessage(String.valueOf(data));
 
 
                         }
@@ -187,7 +198,7 @@ public class HomeFragment extends Fragment {
 
         switch ( item.getItemId()){
             case R.id.action_log_off:
-                //mLoginViewModel.logOff()
+                mLoginViewModel.logOut("admin@gmail.com"); //change to stored emails
                 return true;
         }
 

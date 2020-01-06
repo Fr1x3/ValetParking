@@ -9,7 +9,7 @@ public class Constants {
     // socket io
     public static final String LISTEN_TO = "count";
     public static final String COUNTER = "count";
-    public static final String ZONE = "lift";
+    public static final String ZONE_IO = "lift"; // check to handle this
 
     // shared preference
     public static final String LOCAL_DB = "preference_data";
@@ -17,5 +17,7 @@ public class Constants {
     public static final String GENERATED_ID = "generated_id";
     public static final String EMAIL = "email";
     public static final String LIFT = "lift";
+    public static final String ZONE = "zone";
+
 
 }
