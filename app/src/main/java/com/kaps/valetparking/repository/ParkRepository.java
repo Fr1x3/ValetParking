@@ -5,10 +5,19 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.kaps.valetparking.models.Devices;
 import com.kaps.valetparking.models.Park;
 import com.kaps.valetparking.network.ServiceBuilder;
 import com.kaps.valetparking.network.ValetParkService;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,25 +55,36 @@ public class ParkRepository {
     }
 
     //get single park detail
-    public MutableLiveData<List<Park>> getPark(){
-        final MutableLiveData<List<Park>> parkData = new MutableLiveData<>();
+    public MutableLiveData<Park> getPark(String lift, String username){
+        final MutableLiveData<Park> parkData = new MutableLiveData<>();
 
-        mValetParkService.getParkDetail().enqueue(new Callback<List<Park>>() {
+        mValetParkService.getParkDetail(lift, username).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<List<Park>> call, Response<List<Park>> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if( response.isSuccessful())
                     if(response.code() == 200){
                         Log.d("repo", "successful");
                         Log.d("repo", response.body().toString());
-                        parkData.setValue(response.body());
+
+
+                        try {
+                            JSONObject object = new JSONObject(response.body().string());
+                            JSONObject data = object.getJSONObject("data");
+                            Park mpark = new Park(data.getString("plate_number"), data.getString("lift"), data.getString("floor"), data.getInt("slot"));
+                           parkData.setValue(mpark);
+
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
+                        }
+                        // parkData.setValue(response.body());
 
                     }
 
             }
 
             @Override
-            public void onFailure(Call<List<Park>> call, Throwable t) {
-                parkData.setValue(Collections.<Park>emptyList());
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                parkData.setValue(null);
                 Log.d("home",t.toString());
             }
         });
@@ -121,14 +141,14 @@ public class ParkRepository {
         @Override
         protected Boolean doInBackground(String... strings) {
 
-            mValetParkService.exitPark(strings[0]).enqueue(new Callback<Integer>() {
+            mValetParkService.exitPark(strings[0]).enqueue(new Callback<Devices>() {
                 @Override
-                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                public void onResponse(Call<Devices> call, Response<Devices> response) {
                     if(response.code() == 200 && response.body() != null) {
                         Log.d("Repo", "exit the building ");
-                        Integer code = response.body();
+
                         Log.d("Exit park", response.message());
-                        if( code == 0 )
+                        if( Integer.parseInt(response.body().getStatus()) == 0 )
                             mExitStatus.setValue(true);
                         else
                             mExitStatus.setValue(false);
@@ -139,7 +159,7 @@ public class ParkRepository {
                 }
 
                 @Override
-                public void onFailure(Call<Integer> call, Throwable t) {
+                public void onFailure(Call<Devices> call, Throwable t) {
                     Log.d("Exit park", t.getMessage());
                     t.printStackTrace();
                     mExitStatus.setValue(false);

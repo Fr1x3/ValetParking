@@ -41,10 +41,22 @@
         <action
             android:id="@+id/action_homeFragment_to_carDetailFragment"
             app:destination="@id/carDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.kaps.valetparking.ui.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.kaps.valetparking.ui.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_parkCarFragment"
+            app:destination="@id/parkCarFragment" />
+    </fragment>
 </navigation>

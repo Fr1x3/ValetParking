@@ -12,6 +12,14 @@ public class Devices {
     @Expose
     private String zone;
 
+    @SerializedName("message")
+    @Expose
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
     public String getStatus() {
         return status;
     }

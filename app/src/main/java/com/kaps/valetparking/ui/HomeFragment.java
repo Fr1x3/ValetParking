@@ -45,6 +45,7 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,8 +67,6 @@ public class HomeFragment extends Fragment {
 
         // menu option
         setHasOptionsMenu(true);
-
-
     }
 
     @Override
@@ -100,7 +99,7 @@ public class HomeFragment extends Fragment {
         btnParkCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.action_homeFragment_to_parkCarFragment);
+                navController.navigate(R.id.action_homeFragment_to_cameraFragment);
             }
         });
 
@@ -111,16 +110,16 @@ public class HomeFragment extends Fragment {
                 //check if there is any car to be picked
 
 
-                viewModel.getCar().observe(getViewLifecycleOwner(), new Observer<List<Park>>() {
+                viewModel.getCar().observe(getViewLifecycleOwner(), new Observer<Park>() {
                     @Override
-                    public void onChanged(List<Park> parks) {
+                    public void onChanged(Park parks) {
 
-                        if(parks.size() > 0 ) {
+                        if(parks != null ) {
 
 
                             //create bundle
                              Bundle carBundle = new Bundle();
-                             carBundle.putParcelable(Constants.PARK_DATA, parks.get(0));
+                             carBundle.putParcelable(Constants.PARK_DATA, parks);
 
                             // navigate to the next fragment
                             navController.navigate(R.id.action_homeFragment_to_carDetailFragment, carBundle);
@@ -143,30 +142,30 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void run() {
 
-                        if (args[0] != null) {
+                    if (args[0] != null) {
 
-                            ;
-                            try {
-                                JSONObject datas = new JSONObject(args[0].toString());
+                        ;
+                        try {
+                            JSONObject datas = new JSONObject(args[0].toString());
 
-                                Iterator<String> keys = datas.keys();
+                            Iterator<String> keys = datas.keys();
 
-                                //loop through the key set of the json object
-                                while(keys.hasNext()){
-                                    String key = keys.next();
-                                    int keyValue = datas.getInt(key);
+                            //loop through the key set of the json object
+                            while(keys.hasNext()){
+                                String key = keys.next();
+                                int keyValue = datas.getInt(key);
 
-                                    // filter by zone to check if its for the intended device
-                                    if( key.compareToIgnoreCase("A") == 0 ) { //todo: compare with shared preference zone
-                                        addMessage(String.valueOf(keyValue));
-                                    }
+                                // filter by zone to check if its for the intended device
+                                if( key.compareToIgnoreCase(SharedPreferenceUtil.getString(Constants.ZONE)) == 0 ) { //todo: compare with shared preference zone
+                                    addMessage(String.valueOf(keyValue));
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
-
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
+
+                    }
                     }
 
                 });
@@ -198,7 +197,19 @@ public class HomeFragment extends Fragment {
 
         switch ( item.getItemId()){
             case R.id.action_log_off:
-                mLoginViewModel.logOut("admin@gmail.com"); //change to stored emails
+                mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+                mLoginViewModel.logOut(SharedPreferenceUtil.getString(Constants.EMAIL));
+                mLoginViewModel.mCloseApp.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        if(aBoolean)
+                            Objects.requireNonNull(getActivity()).finishAffinity();
+                    }
+                });
+                return true;
+            case R.id.action_info:
+                Toast.makeText(getContext(), "Email: " + SharedPreferenceUtil.getString(Constants.EMAIL) +
+                        "\n Zone: " + SharedPreferenceUtil.getString(Constants.ZONE), Toast.LENGTH_LONG).show();
                 return true;
         }
 

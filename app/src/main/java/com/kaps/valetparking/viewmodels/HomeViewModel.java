@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.kaps.valetparking.models.Park;
 import com.kaps.valetparking.repository.ParkRepository;
+import com.kaps.valetparking.utils.Constants;
+import com.kaps.valetparking.utils.SharedPreferenceUtil;
 
 import java.util.List;
 
@@ -22,8 +24,9 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     //get details of the car to be collected
-    public MutableLiveData<List<Park>> getCar(){
-
-        return  mParkRepository.getPark();
+    public MutableLiveData<Park> getCar(){
+        String lift = SharedPreferenceUtil.getString(Constants.ZONE);
+        String username = SharedPreferenceUtil.getString(Constants.EMAIL);
+        return  mParkRepository.getPark(lift, username);
     }
 }

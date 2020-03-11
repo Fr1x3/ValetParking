@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -21,13 +23,14 @@ import androidx.navigation.Navigation;
 
 import com.kaps.valetparking.R;
 import com.kaps.valetparking.models.Park;
+import com.kaps.valetparking.utils.Constants;
+import com.kaps.valetparking.utils.SharedPreferenceUtil;
 import com.kaps.valetparking.viewmodels.ParkDetailsViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ParkCarFragment extends Fragment {
-
 
     private String mCarNumberPlate;
     private String mLift;
@@ -88,9 +91,29 @@ public class ParkCarFragment extends Fragment {
 
         // edit text
         final EditText etCarPlate = view.findViewById(R.id.et_car_plate);
-        final EditText etLift = view.findViewById(R.id.et_lift);
-        mEtFloor = view.findViewById(R.id.et_floor);
+        Spinner spinnerFloor = view.findViewById(R.id.spinner_park_lift);
         mEtParkSlot = view.findViewById(R.id.et_park_slot);
+
+        //listen to item selected
+        spinnerFloor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mFloor = parent.getAdapter().getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // enter plate from the camera
+        Bundle bundle = getArguments();
+
+            if (bundle != null)
+                etCarPlate.setText(bundle.getString("capture_plate"));
+
+
 
         // click button action
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -98,8 +121,8 @@ public class ParkCarFragment extends Fragment {
             public void onClick(View view) {
                 // data collected
                 mCarNumberPlate = etCarPlate.getText().toString().trim();
-                mLift = etLift.getText().toString().trim();
-                mFloor =  mEtFloor.getText().toString().trim();
+                mLift = SharedPreferenceUtil.getString(Constants.ZONE);
+
                 mParkSlot =  mEtParkSlot.getText().toString().trim();
 
                 // Todo: validate and confirmation dialog box
@@ -134,12 +157,14 @@ public class ParkCarFragment extends Fragment {
     private void addData() {
 
         // convert to integer
-        int floor = Integer.parseInt(mFloor);
+
         int slot = Integer.parseInt(mParkSlot);
+        String username = SharedPreferenceUtil.getString(Constants.EMAIL);
         //create a new park object
         // set data to the park object
         //todo observables
-        Park park = new Park(mCarNumberPlate, mLift, floor, slot);
+        Park park = new Park(mCarNumberPlate, mLift, mFloor, slot);
+        park.setUsername(username);
         mViewModel.createPark(park);
     }
 

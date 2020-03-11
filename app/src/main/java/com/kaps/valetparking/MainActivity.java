@@ -70,46 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-//
-//        if( SharedPreferenceUtil.getString("email") == null)
-//            navController.navigate(R.id.loginFragment);
-//        else
-//            navController.navigate(R.id.homeFragment);
-
-
-
-
-
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-       // mViewModel.disconnect();
-
-        mLoginViewModel.logOut("");
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.logoff, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch(item.getItemId()){
-            case R.id.action_log_off:
-                // call method to log off
-                mLoginViewModel.logOut(SharedPreferenceUtil.getString("email"));
-                return true;
-
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

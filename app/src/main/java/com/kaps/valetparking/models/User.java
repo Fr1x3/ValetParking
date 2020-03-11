@@ -3,8 +3,10 @@ package com.kaps.valetparking.models;
 import com.google.gson.annotations.SerializedName;
 
 public class User {
+    @SerializedName("zone")
+    private String zone;
 
-    @SerializedName("email")
+    @SerializedName("username")
     private String email;
 
     @SerializedName("password")
@@ -32,4 +34,12 @@ public class User {
     public String getId(){ return id; }
 
     public void setId(String id){ this.id = id; }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
 }

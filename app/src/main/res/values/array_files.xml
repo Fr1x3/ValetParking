@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="zone_arrays">
+        <item>Select Zone of work </item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>G</item>
+    </string-array>
+
+    <string-array name="floor_arrays">
+        <item>Select Floor </item>
+        <item>B2</item>
+        <item>B1</item>
+        <item>G</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+    </string-array>
+</resources>

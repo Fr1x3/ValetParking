@@ -1,5 +1,6 @@
 package com.kaps.valetparking.network;
 
+import com.kaps.valetparking.models.Devices;
 import com.kaps.valetparking.models.Park;
 
 import java.util.List;
@@ -19,8 +20,9 @@ public interface ValetParkService {
 
 
     // get a car out of parking
-    @GET("retrieve")
-    Call<List<Park>> getParkDetail();
+    @FormUrlEncoded
+    @PUT("retrieve")
+    Call<ResponseBody> getParkDetail(@Field("lift") String lift, @Field("username") String username);
 
     // add a car to the list of cars in parking
     @POST("entry")
@@ -29,7 +31,7 @@ public interface ValetParkService {
     // car exit the parking lot
     @FormUrlEncoded
     @PUT("exit")
-    Call<Integer> exitPark(@Field("plate_number") String plate_number);
+    Call<Devices> exitPark(@Field("plate_number") String plate_number);
 
 
 

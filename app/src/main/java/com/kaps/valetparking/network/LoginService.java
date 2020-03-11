@@ -21,5 +21,5 @@ public interface LoginService {
 
     @FormUrlEncoded
     @PUT("login")
-    Call<ResponseBody> logout(@Field("email") String email);
+    Call<Devices> logout(@Field("username") String email);
 }

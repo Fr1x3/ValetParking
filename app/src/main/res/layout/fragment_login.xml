@@ -29,6 +29,15 @@
         android:inputType="textPassword"
         android:textColor="@color/colorTextPrimary" />
 
+    <Spinner
+        android:id="@+id/spinner_login_zone"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_marginTop="16dp"
+        android:scrollbarSize="4dp"
+        android:background="@drawable/spinner_border"
+        android:spinnerMode="dropdown" />
+
     <Button
         android:id="@+id/btn_login"
         android:layout_width="200dp"

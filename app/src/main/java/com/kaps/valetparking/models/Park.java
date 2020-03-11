@@ -8,6 +8,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Park implements Parcelable {
 
+    @SerializedName("username")
+    @Expose
+    private String username;
+
     @SerializedName("plate_number")
     @Expose
     private String vehicleNo;
@@ -18,25 +22,33 @@ public class Park implements Parcelable {
 
     @SerializedName("floor")
     @Expose
-    private int floor;
+    private String floor;
 
     @SerializedName("slot")
     @Expose
     private int parkSlot;
 
+    public String getUsername() {
+        return username;
+    }
 
-    public Park(String vehicleNo, String lift, int floor, int parkSlot) {
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Park(String vehicleNo, String lift, String floor, int parkSlot) {
         this.floor = floor;
         this.vehicleNo = vehicleNo;
         this.parkSlot = parkSlot;
         this.lift = lift;
+
     }
 
 
 
     // getters
 
-    public int getFloor() {
+    public String getFloor() {
         return floor;
     }
 
@@ -63,14 +75,14 @@ public class Park implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(this.vehicleNo);
         parcel.writeString(this.lift);
-        parcel.writeInt(this.floor);
+        parcel.writeString(this.floor);
         parcel.writeInt(this.parkSlot);
     }
 
-    protected Park(Parcel in) {
+    public Park(Parcel in) {
         vehicleNo = in.readString();
         lift = in.readString();
-        floor = in.readInt();
+        floor = in.readString();
         parkSlot = in.readInt();
     }
 

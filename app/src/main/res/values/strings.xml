@@ -2,7 +2,7 @@
     <string name="app_name">Valet Parking</string>
 
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="list_select_info">Swipe right to select a car to get from the parking</string>
     <string name="car_detail_title">Car Information</string>
     <string name="car_number_plate">Car number plate</string>
@@ -16,4 +16,6 @@
     <string name="hint_lift_no">Enter lift identity</string>
     <string name="hint_park_slot">Enter parking slot number</string>
     <string name="log_out">Log out</string>
+    <string name="info">info</string>
+    <string name="login_hint_zone">Enter Lift Assigned</string>
 </resources>

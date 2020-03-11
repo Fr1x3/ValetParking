@@ -15,8 +15,11 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +35,7 @@ public class LoginFragment extends Fragment {
 
     private String mUser;
     private String mPassword;
+    private String mZone;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -53,11 +57,29 @@ public class LoginFragment extends Fragment {
         final LoginViewModel viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
         // login button
-        Button btnLogin = (Button) view.findViewById(R.id.btn_login);
+        Button btnLogin =  view.findViewById(R.id.btn_login);
 
         // EditText
         final EditText etUser = view.findViewById(R.id.et_user);
         final EditText etPassword = view.findViewById(R.id.et_password);
+        final Spinner spinnerZone = view.findViewById(R.id.spinner_login_zone);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),
+                R.array.zone_arrays, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerZone.setAdapter(adapter);
+
+        spinnerZone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mZone = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // get navcontroller
         final NavController navController = Navigation.findNavController(view);
@@ -69,8 +91,10 @@ public class LoginFragment extends Fragment {
                 mUser = etUser.getText().toString().trim();
                 mPassword = etPassword.getText().toString().trim();
 
-                if(validate(mUser, mPassword)){
+
+                if(validate(mUser, mPassword, mZone)){
                     User users = new User(mUser, mPassword);
+                    users.setZone(mZone);
                     viewModel.authenticate(users);
 
                 }
@@ -105,15 +129,13 @@ public class LoginFragment extends Fragment {
                 });
     }
 
-    public boolean validate(String user, String password) {
+    public boolean validate(String user, String password, String zone) {
 
-        if ( !user.isEmpty() && !password.isEmpty() )
+        if ( !user.isEmpty() && !password.isEmpty() && !zone.isEmpty())
             return true;
 
 
-        // todo : check if password and user matches that from the db
-
-        Toast.makeText(getActivity(), "Please Enter username and password", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Please Enter username, password and zone", Toast.LENGTH_SHORT).show();
         return false;
     }
 }

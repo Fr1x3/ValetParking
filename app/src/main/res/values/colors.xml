@@ -5,4 +5,5 @@
     <color name="colorAccent">#536DFE</color>
     <color name="colorTextPrimary">#F57C00</color>
     <color name="colorNotifyCars">#0079F5</color>
+    <color name="colorWhite">#ffffff</color>
 </resources>
